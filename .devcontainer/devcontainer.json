@@ -1,0 +1,22 @@
+{
+  "name": "PHP Blog Development",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "php",
+  "workspaceFolder": "/var/www/html",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "vscode.php-language-features"
+      },
+      "extensions": [
+        "vscode.php-language-features",
+        "ms-vscode.js-debug",
+        "vscode.git",
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+  "remoteUser": "root"
+} 

@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # PHP service with SQLite for development
+  php:
+    image: php:8.2-fpm
+    container_name: php_dev
+    build:
+      context: .
+      dockerfile: php.dev.Dockerfile
+    volumes:
+      - ./src:/var/www/html:cached
+      - database_volume:/var/www/database
+      - php_sessions:/var/lib/php/sessions
+    environment:
+      - SQLITE_DATABASE_PATH=/var/www/database/database.sqlite
+      - PHP_ENV=development
+    networks:
+      - app-network
+    # Don't run as www-data in dev to avoid permission issues
+    # when creating/editing files from the host
+    # user: www-data
+
+  # Nginx web server
+  nginx:
+    image: nginx:latest
+    container_name: nginx_dev
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html:cached
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  database_volume:
+    driver: local
+  php_sessions:
+    driver: local 
