@@ -18,13 +18,24 @@
         <header class="blog-header py-3">
             <div class="row flex-nowrap justify-content-between align-items-center">
                 <div class="col-4 pt-1">
-                    <a class="link-secondary" href="/users">User Form</a>
+                    <?php if (isset($_SESSION['user_id']) && $_SESSION['is_admin']): ?>
+                        <a class="link-secondary" href="/admin/dashboard">Admin Dashboard</a>
+                    <?php else: ?>
+                        <a class="link-secondary" href="/users">User Form</a>
+                    <?php endif; ?>
                 </div>
                 <div class="col-4 text-center">
                     <a class="blog-header-logo text-dark text-decoration-none" href="/">Simple Blog</a>
                 </div>
                 <div class="col-4 d-flex justify-content-end align-items-center">
-                    <a class="btn btn-sm btn-outline-secondary" href="/posts/create">Create Post</a>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <?php if ($_SESSION['is_admin']): ?>
+                            <a class="btn btn-sm btn-outline-primary me-2" href="/admin/posts/create">Create Post</a>
+                        <?php endif; ?>
+                        <a class="btn btn-sm btn-outline-secondary" href="/auth/logout">Logout</a>
+                    <?php else: ?>
+                        <a class="btn btn-sm btn-outline-primary" href="/auth/login">Admin Login</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </header>
@@ -32,5 +43,8 @@
             <nav class="nav d-flex justify-content-between">
                 <a class="p-2 link-secondary" href="/">Home</a>
                 <a class="p-2 link-secondary" href="/posts">All Posts</a>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['is_admin']): ?>
+                    <a class="p-2 link-secondary" href="/admin/dashboard">Manage Posts</a>
+                <?php endif; ?>
             </nav>
         </div> 

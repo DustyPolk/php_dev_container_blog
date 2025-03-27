@@ -32,6 +32,8 @@ class Database {
             name TEXT NOT NULL,
             email TEXT NOT NULL,
             message TEXT,
+            password TEXT,
+            is_admin BOOLEAN DEFAULT 0,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )');
         

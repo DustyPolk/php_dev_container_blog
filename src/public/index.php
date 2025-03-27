@@ -52,6 +52,63 @@ switch ($controller) {
             echo '404 Not Found';
         }
         break;
+    
+    case 'auth':
+        require_once __DIR__ . '/../controllers/AuthController.php';
+        $controller = new AuthController();
+        
+        if ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+            $controller->showLogin();
+        } elseif ($action === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->login();
+        } elseif ($action === 'logout') {
+            $controller->logout();
+        } else {
+            http_response_code(404);
+            echo '404 Not Found';
+        }
+        break;
+    
+    case 'admin':
+        require_once __DIR__ . '/../controllers/AdminController.php';
+        $controller = new AdminController();
+        
+        if (empty($action) || $action === 'dashboard') {
+            $controller->dashboard();
+        } elseif ($action === 'posts') {
+            if ($param === 'create') {
+                $controller->createPost();
+            } elseif ($param === 'store' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $controller->storePost();
+            } elseif ($param === 'edit' && isset($uri[3])) {
+                $controller->editPost($uri[3]);
+            } elseif ($param === 'update' && isset($uri[3]) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $controller->updatePost($uri[3]);
+            } elseif ($param === 'delete' && isset($uri[3]) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                $controller->deletePost($uri[3]);
+            } else {
+                http_response_code(404);
+                echo '404 Not Found';
+            }
+        } else {
+            http_response_code(404);
+            echo '404 Not Found';
+        }
+        break;
+    
+    case 'debug':
+        require_once __DIR__ . '/../controllers/DebugController.php';
+        $controller = new DebugController();
+        
+        if ($action === 'login') {
+            $controller->loginForm();
+        } elseif ($action === 'process-login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->processLogin();
+        } else {
+            http_response_code(404);
+            echo '404 Not Found';
+        }
+        break;
         
     default:
         http_response_code(404);
